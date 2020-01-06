@@ -9,31 +9,7 @@
  * Dibuat oleh Ibnu Maksum @ibnux
  * Sumber BMKG: http://data.bmkg.go.id/
  * */
-include "medoo.php";
-
-//Konfigurasi database, struktur ada di bmkg.sql
-$mysqluser = "bmkg";
-$mysqlpass = "bmkg2019";
-$mysqldb = "bmkg_cuaca";
-
-//untuk koneksi ke database
-$db = new medoo([
-	// required
-	'database_type' => 'mysql',
-	'database_name' => $mysqldb,
-	'server' => 'localhost',
-	'username' => $mysqluser,
-	'password' => $mysqlpass,
-	'charset' => 'utf8',
- 
-	// [optional]
-	'port' => 3306,
- 
-	// driver_option for connection, read more from http://www.php.net/manual/en/pdo.setattribute.php
-	'option' => [
-		PDO::ATTR_CASE => PDO::CASE_NATURAL
-	]
-]);
+include "config.php";
 
 // Propinsi yang tersedia di situs BMKG
 $props = array('Aceh','Bali','BangkaBelitung','Banten','Bengkulu','DIYogyakarta','DKIJakarta','Gorontalo','Jambi','JawaBarat',
@@ -204,7 +180,24 @@ foreach($props as $prop){
             }
         }
     }
-
-    //$json = json_encode($array['forecast']['area']);
-    //print_r($json);
 }
+
+// GENERATE FILE UNTUK HARI INI, 
+// HAPUS JIKA TIDAK BUTUH 
+
+$wilayah = $db->select("t_wilayah","*",["ORDER"=>"propinsi ASC"]);
+
+//simpan ke file
+file_put_contents("./cuaca/wilayah.json",json_encode($wilayah));
+
+foreach($wilayah as $wil){
+    $id = $wil['id'];
+    $cuaca = $db->query('SELECT jamCuaca,kodeCuaca,cuaca,humidity,tempC,tempF FROM t_cuaca WHERE DATE(jamCuaca)>=DATE(NOW()) AND idWilayah='.$id.' ORDER BY jamCuaca ASC')->fetchAll();
+
+    //simpan ke file
+    file_put_contents("./cuaca/$id.json",json_encode($cuaca));
+}
+
+//KIRIM KE GIT
+//HAPUS jika tidak dibutuhkan
+shell_exec('git commit -a -m "Update Cuaca tanggal '.date("d M Y H:i").' " && git push');

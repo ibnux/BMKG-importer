@@ -1,6 +1,10 @@
+
 ## Importer Data Prakiraan Cuaca BMKG
 
+  
+
 ![Cuaca](http://data.bmkg.go.id/assets/img/cuaca.svg)
+
 Script PHP untuk import data prakiraan cuaca dari BMKG, dan ditambahkan ke database MYSQL, sehingga untuk kebutuhan ambil data cuaca bisa langsung query tanpa harus rekues lagi ke server BMKG
 
 Apa yang saya lakukan dengan data ini?
@@ -11,17 +15,39 @@ Script ini bisa dijalankan di Browser ataupun di command line, tapi bagusnya di 
 
 Dan ingat, bahwa anda harus memberitahukan jika datanya dari BMKG.
 
-#### Sumber
+## Instalasi
 
-- [BMKG](http://data.bmkg.go.id/prakiraan-cuaca/) 
-- [ICON](http://www.iconarchive.com/tag/weather)
-- [Medoo](http://www.iconarchive.com/tag/weather)
+Copy **config.example.php** menjadi **config.php**
+ganti isinya dengan konfigurasi database anda
+impor **bmkg.sql** ke database anda
+pada file **bmkg.php** di paling bawah, **hapus** bagian **git**
+kecuali anda mau host datanya di Github juga
+
+# Pakai langsung?
+
+siapkan url endpoint
+```https://ibnux.github.io/BMKG-importer/```
+
+dari aplikasi, unduh file wilayah.json
+```https://ibnux.github.io/BMKG-importer/cuaca/wilayah.json```
+
+Dari json tersebut, kalkulasi lokasi user dengan wilayah terdekat, atau user pilih sendiri.
+
+lalu download cuaca di wilayah yang dipilih berdasarkan kodenya
+```https://ibnux.github.io/BMKG-importer/cuaca/idWilayah.json```
+
+contoh: 
+```https://ibnux.github.io/BMKG-importer/cuaca/501233.json```
+
+sesuaikan kode cuaca dengan icon di folder icon
+```https://ibnux.github.io/BMKG-importer/icon/5.png```
+
+#### Sumber
+-  [BMKG](http://data.bmkg.go.id/prakiraan-cuaca/)
+-  [ICON](http://www.iconarchive.com/tag/weather)
+-  [Medoo](http://www.iconarchive.com/tag/weather)
 
 Silahkan dimanfatkan untuk keperluan anda
 
 Salam
-
-
-
-Ibnu Maksum
-@ibnux
+Ibnu Maksum (@ibnux)
