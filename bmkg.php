@@ -192,7 +192,7 @@ file_put_contents("./cuaca/wilayah.json",json_encode($wilayah));
 
 foreach($wilayah as $wil){
     $id = $wil['id'];
-    $cuaca = $db->query('SELECT jamCuaca,kodeCuaca,cuaca,humidity,tempC,tempF FROM t_cuaca WHERE DATE(jamCuaca)>=DATE(NOW()) AND idWilayah='.$id.' ORDER BY jamCuaca ASC')->fetchAll();
+    $cuaca = $db->query('SELECT jamCuaca,kodeCuaca,cuaca,humidity,tempC,tempF FROM t_cuaca WHERE DATE(jamCuaca)>=DATE(NOW()) AND idWilayah='.$id.' ORDER BY jamCuaca ASC')->fetchAll(PDO::FETCH_ASSOC);
 
     //simpan ke file
     file_put_contents("./cuaca/$id.json",json_encode($cuaca));
