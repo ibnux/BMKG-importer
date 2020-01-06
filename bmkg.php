@@ -200,4 +200,4 @@ foreach($wilayah as $wil){
 
 //KIRIM KE GIT
 //HAPUS jika tidak dibutuhkan
-shell_exec('git commit -a -m "Update Cuaca tanggal '.date("d M Y H:i").' " && git push');
+shell_exec('git add . && git commit -m "Update Cuaca tanggal '.date("d M Y H:i").' " && git push');
