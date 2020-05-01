@@ -5,7 +5,7 @@
  * dari API nya sendiri, BMKG menyediakan sampai 3 hari ke depan
  * Jalankan Script ini dari Command Line, gunakan Crontab agar di eksekusi tiap hari
  * contoh crontab https://crontab.guru/#0_3_*_*_*
- * 
+ *
  * Dibuat oleh Ibnu Maksum @ibnux
  * Sumber BMKG: http://data.bmkg.go.id/
  * */
@@ -111,10 +111,10 @@ foreach($props as $prop){
                         }else{
                             // isinya sama
                             echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
-                        }    
+                        }
                     }
                 }
-                
+
             //Jika data kelembaban
             }else if($param['attributes']['id']=='hu'){
                 //Tambahkan ke database
@@ -143,7 +143,7 @@ foreach($props as $prop){
                         }else{
                             // isinya sama
                             echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
-                        }    
+                        }
                     }
                 }
             //Jika data Temperatur
@@ -174,7 +174,7 @@ foreach($props as $prop){
                         }else{
                             // isinya sama
                             echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." EXISTS\n";
-                        }    
+                        }
                     }
                 }
             }
@@ -182,8 +182,8 @@ foreach($props as $prop){
     }
 }
 
-// GENERATE FILE UNTUK HARI INI, 
-// HAPUS JIKA TIDAK BUTUH 
+// GENERATE FILE UNTUK HARI INI,
+// HAPUS JIKA TIDAK BUTUH
 
 $wilayah = $db->select("t_wilayah","*",["ORDER"=>"propinsi ASC"]);
 
