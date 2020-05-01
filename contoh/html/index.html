@@ -112,7 +112,27 @@
             }
         }
 
-        getWilayah();
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, onErrorGPS);
+            } else {
+                //ga bisa dapat GPS, pake default aja
+                getWilayah();
+            }
+        }
+
+        function showPosition(position) {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            getWilayah();
+        }
+
+        function onErrorGPS(error) {
+            //ake default aja
+            getWilayah();
+        }
+
+        getLocation();
     </script>
 </body>
 
