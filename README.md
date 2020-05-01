@@ -1,7 +1,7 @@
 
 ## Importer Data Prakiraan Cuaca BMKG
 
-  
+
 
 ![Cuaca](http://data.bmkg.go.id/assets/img/cuaca.svg)
 
@@ -36,11 +36,18 @@ Dari json tersebut, kalkulasi lokasi user dengan wilayah terdekat, atau user pil
 lalu download cuaca di wilayah yang dipilih berdasarkan kodenya
 ```https://ibnux.github.io/BMKG-importer/cuaca/idWilayah.json```
 
-contoh: 
+contoh:
 ```https://ibnux.github.io/BMKG-importer/cuaca/501233.json```
 
 sesuaikan kode cuaca dengan icon di folder icon
 ```https://ibnux.github.io/BMKG-importer/icon/5.png```
+
+
+# Contoh
+cek folder **contoh**
+-  [HTML](contoh/html/)
+-  [PHP](contoh/php/index.php)
+
 
 #### Sumber
 -  [BMKG](http://data.bmkg.go.id/prakiraan-cuaca/)
