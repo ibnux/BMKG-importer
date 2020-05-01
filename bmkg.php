@@ -95,25 +95,26 @@ foreach($props as $prop){
                             $d = substr($jam,6,2);
                             $h = substr($jam,8,2);
                             $i = substr($jam,10,2);
+                            $value = (is_array($tm['value']))?$tm['value'][0]:$tm['value'];
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
                                 $db->insert("t_cuaca",
-                                    ['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]]);
+                                    ['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$value,'cuaca'=>$kodeCuaca[$value]]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." INSERT\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." INSERT\n";
                                 }else{
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." FAILED\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." FAILED\n";
                                 }
                             }else{
-                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value']]])){
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$value]])){
                                     //ada perbedaan, update dong
                                     $db->update("t_cuaca",
-                                        ['kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]],
+                                        ['kodeCuaca'=>$value,'cuaca'=>$kodeCuaca[$value]],
                                         ['AND'=>['idWilayah'=>$idWilayah, 'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
 
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." UPDATE\n";
                                 }else{
                                     // isinya sama
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." EXISTS\n";
                                 }
                             }
                         }
@@ -129,23 +130,24 @@ foreach($props as $prop){
                             $d = substr($jam,6,2);
                             $h = substr($jam,8,2);
                             $i = substr($jam,10,2);
+                            $value = (is_array($tm['value']))?$tm['value'][0]:$tm['value'];
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]);
+                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$value]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." INSERT\n";
                                 }else{
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." FAILED\n";
                                 }
                             }else{
-                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]])){
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$value]])){
                                     //ada perbedaan, update dong
                                     $db->update("t_cuaca",
-                                        ['humidity'=>$tm['value']],
+                                        ['humidity'=>$value],
                                         ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." UPDATE\n";
                                 }else{
                                     // isinya sama
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." EXISTS\n";
                                 }
                             }
                         }
@@ -160,23 +162,24 @@ foreach($props as $prop){
                             $d = substr($jam,6,2);
                             $h = substr($jam,8,2);
                             $i = substr($jam,10,2);
+                            $value = (is_array($tm['value']))?$tm['value'][0]:$tm['value'];
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]);
+                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." INSERT\n";
                                 }else{
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." FAILED\n";
                                 }
                             }else{
-                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]])){
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]])){
                                     //ada perbedaan, update dong
                                     $db->update("t_cuaca",
-                                        ['tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]],
+                                        ['tempC'=>$value[0],'tempF'=>$value[1]],
                                         ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." UPDATE\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." UPDATE\n";
                                 }else{
                                     // isinya sama
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." EXISTS\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." EXISTS\n";
                                 }
                             }
                         }
