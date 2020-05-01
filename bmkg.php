@@ -144,10 +144,10 @@ foreach($props as $prop){
                                     $db->update("t_cuaca",
                                         ['humidity'=>$value],
                                         ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." UPDATE\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 humidity ".$value." UPDATE\n";
                                 }else{
                                     // isinya sama
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$value." EXISTS\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 humidity ".$value." EXISTS\n";
                                 }
                             }
                         }
