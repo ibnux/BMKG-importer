@@ -9,6 +9,7 @@
  * Dibuat oleh Ibnu Maksum @ibnux
  * Sumber BMKG: http://data.bmkg.go.id/
  * */
+date_default_timezone_set("Asia/Jakarta");
 include "config.php";
 
 // Propinsi yang tersedia di situs BMKG
