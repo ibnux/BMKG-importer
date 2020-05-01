@@ -14,12 +14,12 @@
             column-count: 6;
         }
     </style>
-    <title>Contoh BMKG</title>
+    <title>Contoh BMKG oleh @ibnux</title>
 </head>
 
 <body>
     <div class="container">
-        <h1>Contoh BMKG</h1>
+        <h1>Contoh BMKG oleh @ibnux</h1>
         <div class="card">
             <div class="card-header" id="judulTerdekat">
                 Jarak terdekat dari ?
@@ -33,8 +33,6 @@
         </div>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
         var lat = -6.3730914;
@@ -63,7 +61,7 @@
                 $('#judulTerdekat').html("Jarak terdekat dari " + lat + "," + lon);
                 $('#wilayahTerdekat').html(items.join(""));
                 $('#judulCuaca').html(data[0].propinsi +
-                        ', ' + data[0].kota + ', ' + data[0].kecamatan + ' ' + data[0].jarak.toFixed(2));
+                        ', ' + data[0].kota + ', ' + data[0].kecamatan + ' ' + data[0].jarak.toFixed(2)+" km");
                 getCuaca(data[0].id);
             });
         }
