@@ -163,25 +163,23 @@ foreach($props as $prop){
                             $h = substr($jam,8,2);
                             $i = substr($jam,10,2);
                             $value = $tm['value'];
-                            print_r($value);
-                            die();
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]);
+                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0][0],'tempF'=>$value[1][0]]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." INSERT\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0][0]."-".$value[1][0]." INSERT\n";
                                 }else{
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." FAILED\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0][0]."-".$value[1][0]." FAILED\n";
                                 }
                             }else{
-                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]])){
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0][0],'tempF'=>$value[1][0]]])){
                                     //ada perbedaan, update dong
                                     $db->update("t_cuaca",
                                         ['tempC'=>$value[0],'tempF'=>$value[1]],
                                         ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." UPDATE\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0][0]."-".$value[1][0]." UPDATE\n";
                                 }else{
                                     // isinya sama
-                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." EXISTS\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0][0]."-".$value[1][0]." EXISTS\n";
                                 }
                             }
                         }
