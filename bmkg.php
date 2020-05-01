@@ -134,9 +134,9 @@ foreach($props as $prop){
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
                                 $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$value]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." INSERT\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 humidity ".$value." INSERT\n";
                                 }else{
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." FAILED\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 humidity ".$value." FAILED\n";
                                 }
                             }else{
                                 if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$value]])){
@@ -162,13 +162,13 @@ foreach($props as $prop){
                             $d = substr($jam,6,2);
                             $h = substr($jam,8,2);
                             $i = substr($jam,10,2);
-                            $value = (is_array($tm['value']))?$tm['value'][0]:$tm['value'];
+                            $value = $tm['value'];
                             if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
                                 $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]);
                                 if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." INSERT\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." INSERT\n";
                                 }else{
-                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$value." FAILED\n";
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$value[0]."-".$value[1]." FAILED\n";
                                 }
                             }else{
                                 if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$value[0],'tempF'=>$value[1]]])){
