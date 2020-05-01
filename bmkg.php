@@ -55,131 +55,135 @@ foreach($props as $prop){
 
     //Masuk ke objek area
     $areas = $array['forecast']['area'];
-    foreach($areas as $area){
-        $idWilayah = $area['attributes']['id'];
-        //cek apakah sudah ada di database
-        if(!$db->has("t_wilayah",['id'=>$idWilayah])){
-            //Tambahkan ke tabel
-            $db->insert("t_wilayah",[
-                'id'=>$idWilayah,
-                'propinsi'=>$prop,
-                'kota'=>$area['name'][1],
-                'kecamatan'=>$area['name'][0],
-                'lat'=>$area['attributes']['latitude'],
-                'lon'=>$area['attributes']['longitude']]
-            );
-            //Cek lagi apakah sukses atau ngga, jika sukses tentu sudah ada di database
-            if($db->has("t_wilayah",['id'=>$idWilayah])){
-                echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." ADDED\n";
+    if(count($areas)>0){
+        foreach($areas as $area){
+            $idWilayah = $area['attributes']['id'];
+            //cek apakah sudah ada di database
+            if(!$db->has("t_wilayah",['id'=>$idWilayah])){
+                //Tambahkan ke tabel
+                $db->insert("t_wilayah",[
+                    'id'=>$idWilayah,
+                    'propinsi'=>$prop,
+                    'kota'=>$area['name'][1],
+                    'kecamatan'=>$area['name'][0],
+                    'lat'=>$area['attributes']['latitude'],
+                    'lon'=>$area['attributes']['longitude']]
+                );
+                //Cek lagi apakah sukses atau ngga, jika sukses tentu sudah ada di database
+                if($db->has("t_wilayah",['id'=>$idWilayah])){
+                    echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." ADDED\n";
+                }else{
+                    echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." FAILED\n";
+                }
             }else{
-                echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." FAILED\n";
+                echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." EXISTS\n";
             }
-        }else{
-            echo $idWilayah." ".$area['attributes']['domain']." ".$area['attributes']['description']." EXISTS\n";
-        }
 
-        //parsing ramalan cuaca, data lain tidak diambil seperti arah angin
-        $params = $area['parameter'];
-        foreach($params as $param){
-            //Jika data cuaca
-            if($param['attributes']['id']=='weather'){
-                //Tambahkan ke database
-                $times = $param['timerange'];
-                foreach($times as $tm){
-                    $jam = $tm['attributes']['datetime'];
-                    $y = substr($jam,0,4);
-                    $m = substr($jam,4,2);
-                    $d = substr($jam,6,2);
-                    $h = substr($jam,8,2);
-                    $i = substr($jam,10,2);
-                    if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                        $db->insert("t_cuaca",
-                            ['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]]);
-                        if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." INSERT\n";
-                        }else{
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." FAILED\n";
+            //parsing ramalan cuaca, data lain tidak diambil seperti arah angin
+            $params = $area['parameter'];
+            if(is_array($params) && count($params)>0){
+                foreach($params as $param){
+                    //Jika data cuaca
+                    if($param['attributes']['id']=='weather'){
+                        //Tambahkan ke database
+                        $times = $param['timerange'];
+                        foreach($times as $tm){
+                            $jam = $tm['attributes']['datetime'];
+                            $y = substr($jam,0,4);
+                            $m = substr($jam,4,2);
+                            $d = substr($jam,6,2);
+                            $h = substr($jam,8,2);
+                            $i = substr($jam,10,2);
+                            if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                $db->insert("t_cuaca",
+                                    ['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]]);
+                                if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." INSERT\n";
+                                }else{
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." FAILED\n";
+                                }
+                            }else{
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value']]])){
+                                    //ada perbedaan, update dong
+                                    $db->update("t_cuaca",
+                                        ['kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]],
+                                        ['AND'=>['idWilayah'=>$idWilayah, 'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
+
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
+                                }else{
+                                    // isinya sama
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
+                                }
+                            }
                         }
-                    }else{
-                        if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'kodeCuaca'=>$tm['value']]])){
-                            //ada perbedaan, update dong
-                            $db->update("t_cuaca",
-                                ['kodeCuaca'=>$tm['value'],'cuaca'=>$kodeCuaca[$tm['value']]],
-                                ['AND'=>['idWilayah'=>$idWilayah, 'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
 
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
-                        }else{
-                            // isinya sama
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
+                    //Jika data kelembaban
+                    }else if($param['attributes']['id']=='hu'){
+                        //Tambahkan ke database
+                        $times = $param['timerange'];
+                        foreach($times as $tm){
+                            $jam = $tm['attributes']['datetime'];
+                            $y = substr($jam,0,4);
+                            $m = substr($jam,4,2);
+                            $d = substr($jam,6,2);
+                            $h = substr($jam,8,2);
+                            $i = substr($jam,10,2);
+                            if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]);
+                                if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
+                                }else{
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
+                                }
+                            }else{
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]])){
+                                    //ada perbedaan, update dong
+                                    $db->update("t_cuaca",
+                                        ['humidity'=>$tm['value']],
+                                        ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
+                                }else{
+                                    // isinya sama
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
+                                }
+                            }
+                        }
+                    //Jika data Temperatur
+                    }else if($param['attributes']['id']=='t'){
+                        //Tambahkan ke database
+                        $times = $param['timerange'];
+                        foreach($times as $tm){
+                            $jam = $tm['attributes']['datetime'];
+                            $y = substr($jam,0,4);
+                            $m = substr($jam,4,2);
+                            $d = substr($jam,6,2);
+                            $h = substr($jam,8,2);
+                            $i = substr($jam,10,2);
+                            if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]);
+                                if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
+                                }else{
+                                    echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
+                                }
+                            }else{
+                                if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]])){
+                                    //ada perbedaan, update dong
+                                    $db->update("t_cuaca",
+                                        ['tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]],
+                                        ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." UPDATE\n";
+                                }else{
+                                    // isinya sama
+                                    echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." EXISTS\n";
+                                }
+                            }
                         }
                     }
-                }
-
-            //Jika data kelembaban
-            }else if($param['attributes']['id']=='hu'){
-                //Tambahkan ke database
-                $times = $param['timerange'];
-                foreach($times as $tm){
-                    $jam = $tm['attributes']['datetime'];
-                    $y = substr($jam,0,4);
-                    $m = substr($jam,4,2);
-                    $d = substr($jam,6,2);
-                    $h = substr($jam,8,2);
-                    $i = substr($jam,10,2);
-                    if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                        $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]);
-                        if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                            echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
-                        }else{
-                            echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
-                        }
-                    }else{
-                        if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'humidity'=>$tm['value']]])){
-                            //ada perbedaan, update dong
-                            $db->update("t_cuaca",
-                                ['humidity'=>$tm['value']],
-                                ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." UPDATE\n";
-                        }else{
-                            // isinya sama
-                            echo "jamCuaca $y-$m-$d $h:$i:00 kodeCuaca ".$tm['value']." EXISTS\n";
-                        }
-                    }
-                }
-            //Jika data Temperatur
-            }else if($param['attributes']['id']=='t'){
-                //Tambahkan ke database
-                $times = $param['timerange'];
-                foreach($times as $tm){
-                    $jam = $tm['attributes']['datetime'];
-                    $y = substr($jam,0,4);
-                    $m = substr($jam,4,2);
-                    $d = substr($jam,6,2);
-                    $h = substr($jam,8,2);
-                    $i = substr($jam,10,2);
-                    if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                        $db->insert("t_cuaca",['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]);
-                        if($db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]])){
-                            echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." INSERT\n";
-                        }else{
-                            echo "humidity $y-$m-$d $h:$i:00 humidity ".$tm['value']." FAILED\n";
-                        }
-                    }else{
-                        if(!$db->has("t_cuaca",['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00",'tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]]])){
-                            //ada perbedaan, update dong
-                            $db->update("t_cuaca",
-                                ['tempC'=>$tm['value'][0],'tempF'=>$tm['value'][1]],
-                                ['AND'=>['idWilayah'=>$idWilayah,'jamCuaca'=>"$y-$m-$d $h:$i:00"]]);
-                            echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." UPDATE\n";
-                        }else{
-                            // isinya sama
-                            echo "jamCuaca $y-$m-$d $h:$i:00 temp ".$tm['value'][0]."-".$tm['value'][1]." EXISTS\n";
-                        }
-                    }
-                }
-            }
-        }
-    }
+                }//foreach($params as $param){
+            }//if(count($params)>0){
+        }//foreach($areas as $area){
+    }//if(count($areas)>0){
 }
 
 // GENERATE FILE UNTUK HARI INI,
