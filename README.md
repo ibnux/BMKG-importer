@@ -1,9 +1,15 @@
 
 ## Importer Data Prakiraan Cuaca BMKG
 
+>
+> [!WARNING]  
+> Projek dihentikan karena BMKG mengubah APInya dan sudah menjadi JSON
+> APInya membutuhkan kode wilayah tingkat 4 yaitu kelurahan
+> https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=36.73.04.1003
+>
+>
 
 
-![Cuaca](https://data.bmkg.go.id/include/assets/img/cuaca.svg)
 
 Script PHP untuk import data prakiraan cuaca dari BMKG, dan ditambahkan ke database MYSQL, sehingga untuk kebutuhan ambil data cuaca bisa langsung query tanpa harus rekues lagi ke server BMKG
 
